@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useCallback, useEffect, useState, useRef } from 'react';
 import classnames from 'classnames';
-import './multiRangeSlider.css';
+import './MultiRangeSlider.css';
 
 export default function MultiRangeSlider({ min, max, onChange, disabled }) {
     const [minVal, setMinVal] = useState(min);
