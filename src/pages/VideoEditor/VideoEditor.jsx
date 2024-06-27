@@ -4,17 +4,20 @@ import { Button, Modal, Spinner, Toast, ToastContainer } from "react-bootstrap";
 import styles from "./VideoEditor.module.css";
 
 import video_placeholder from "../../assets/images/editor/video_placeholder.png";
-import VideoPlayer from "./VideoPlayer";
+import VideoPlayer from "../../components/VideoPlayer";
 import MultiRangeSlider from "../../components/MultiRangeSlider";
 import VideoConversionButton from "./VideoConversionButton";
 import { sliderValueToVideoTime } from "../../utils/utils";
 
 import useDeviceType from '../../hooks/useDeviceType';
+import DeviceLayout from "../../components/DeviceLayout";
 const ffmpeg = createFFmpeg({ log: true });
+
+export const VideoEditorContext = React.createContext();
 
 const VideoEditor = () => {
   const device = useDeviceType();
-  const uploadFile = useRef("");
+
   const [ffmpegLoaded, setFFmpegLoaded] = useState(false);
   const [sliderValues, setSliderValues] = useState([0, 100]);
   const [videoFile, setVideoFile] = useState();
@@ -22,6 +25,7 @@ const VideoEditor = () => {
   const [videoPlayer, setVideoPlayer] = useState();
   const [processing, setProcessing] = useState(false);
   const [show, setShow] = useState(false);
+
 
   useEffect(() => {
     ffmpeg.load().then(() => {
@@ -62,223 +66,19 @@ const VideoEditor = () => {
   if (!ffmpegLoaded) return <div>load</div>;
 
   return (
-    <>
-      {
-        device === 'mobile' ? (
-          <article className="layout" style={{ padding: "56px 16px" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "16px",
-              }}
-            >
-              <h1 className={styles.title}>Video Edit</h1>
-              {videoFile && (
-                <div>
-                  <input onChange={(e) => setVideoFile(e.target.files[0])}
-                    type="file"
-                    accept="video/*"
-                    style={{ display: "none" }}
-                    ref={uploadFile}
-                  />
-                  <Button
-                    onClick={() => uploadFile.current.click()}
-                    className={styles.re__upload__btn}
-                    style={{ width: "fit-content" }}
-                  >
-                    비디오 재선택
-                  </Button>
-                </div>
-              )}
-            </div>
-            <section>
-              {
-                videoFile ? (
-                  <VideoPlayer
-                    src={videoFile}
-                    onPlayerChange={(videoPlayer) => {
-                      setVideoPlayer(videoPlayer)
-                    }}
-                    onChange={(videoPlayerState) => {
-                      setVideoPlayerState(videoPlayerState)
-                    }}
-                  />
-                ) : (
-                  <>
-                    <img
-                      src={video_placeholder}
-                      alt="비디오를 업로드해주세요."
-                      style={{ marginBottom: "32px" }}
-                    ></img>
-                    <div>
-                      <input onChange={(e) => setVideoFile(e.target.files[0])}
-                        type="file"
-                        accept="video/*"
-                        style={{ display: "none" }}
-                        ref={uploadFile}
-                      />
-                      <Button
-                        className={styles.upload__btn}
-                        onClick={() => uploadFile.current.click()}
-                      >
-                        비디오 업로드
-                      </Button>
-                    </div>
-                  </>
-                )
-              }
-            </section>
-
-            {
-              videoFile && (
-                <>
-                  <section
-                    style={{
-                      width: '100%',
-                      marginTop: 30,
-                      marginBottom: 62,
-                      display: 'flex',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <MultiRangeSlider
-                      min={0}
-                      max={100}
-                      onChange={({ min, max }) => {
-                        setSliderValues([min, max])
-                      }}
-                    />
-                  </section>
-                  <section>
-                    <VideoConversionButton
-                      onConversionStart={() => {
-                        setProcessing(true);
-                      }}
-                      onConversionEnd={() => {
-                        setProcessing(false);
-                        setShow(true);
-                      }}
-                      ffmpeg={ffmpeg}
-                      videoPlayerState={videoPlayerState}
-                      sliderValues={sliderValues}
-                      videoFile={videoFile}
-                    />
-                  </section>
-                </>
-              )}
-          </article>
-        ) : (
-          <article className="pc-layout" style={{ padding: "56px 16px" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "16px",
-              }}
-            >
-              <h1 className={styles.title}>Video Edit</h1>
-              {videoFile && (
-                <div>
-                  <input onChange={(e) => setVideoFile(e.target.files[0])}
-                    type="file"
-                    accept="video/*"
-                    style={{ display: "none" }}
-                    ref={uploadFile}
-                  />
-                  <Button
-                    onClick={() => uploadFile.current.click()}
-                    className={styles.re__upload__btn}
-                    style={{ width: "fit-content" }}
-                  >
-                    비디오 재선택
-                  </Button>
-                </div>
-              )}
-            </div>
-            <section>
-              {
-                videoFile ? (
-                  <VideoPlayer
-                    src={videoFile}
-                    onPlayerChange={(videoPlayer) => {
-                      setVideoPlayer(videoPlayer)
-                    }}
-                    onChange={(videoPlayerState) => {
-                      setVideoPlayerState(videoPlayerState)
-                    }}
-                  />
-                ) : (
-                  <>
-                    <img
-                      src={video_placeholder}
-                      alt="비디오를 업로드해주세요."
-                      style={{
-                        width: "100%",
-                        maxHeight: "inherit", 
-                        marginBottom: "32px" }}
-                    ></img>
-                    <div>
-                      <input onChange={(e) => setVideoFile(e.target.files[0])}
-                        type="file"
-                        accept="video/*"
-                        style={{ display: "none" }}
-                        ref={uploadFile}
-                      />
-                      <Button
-                        className={styles.upload__btn}
-                        onClick={() => uploadFile.current.click()}
-                      >
-                        비디오 업로드
-                      </Button>
-                    </div>
-                  </>
-                )
-              }
-            </section>
-
-            {
-              videoFile && (
-                <>
-                  <section
-                    style={{
-                      width: '100%',
-                      marginTop: 30,
-                      marginBottom: 62,
-                      display: 'flex',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <MultiRangeSlider
-                      min={0}
-                      max={100}
-                      onChange={({ min, max }) => {
-                        setSliderValues([min, max])
-                      }}
-                    />
-                  </section>
-                  <section style={{display: 'flex', gap: 16}}>
-                    <VideoConversionButton
-                      onConversionStart={() => {
-                        setProcessing(true);
-                      }}
-                      onConversionEnd={() => {
-                        setProcessing(false);
-                        setShow(true);
-                      }}
-                      ffmpeg={ffmpeg}
-                      videoPlayerState={videoPlayerState}
-                      sliderValues={sliderValues}
-                      videoFile={videoFile}
-                    />
-                  </section>
-                </>
-              )}
-          </article>
-        )
-      }
+    <VideoEditorContext.Provider
+      value={{
+        device,
+        sliderValues, setSliderValues,
+        videoFile, setVideoFile,
+        videoPlayerState, setVideoPlayerState,
+        videoPlayer, setVideoPlayer,
+        processing, setProcessing,
+        show, setShow,
+        ffmpeg
+      }}
+    >
+      <DeviceLayout />
       <ToastContainer className="p-3" position={'top-center'} style={{ zIndex: 1 }}>
         <Toast onClose={() => setShow(false)} show={show} delay={2000} bg="dark" autohide>
           <Toast.Header closeButton={false}>
@@ -306,7 +106,7 @@ const VideoEditor = () => {
           </p>
         </div>
       </Modal>
-    </>
+    </VideoEditorContext.Provider>
 
   );
 };
