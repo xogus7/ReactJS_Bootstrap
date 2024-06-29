@@ -1,6 +1,6 @@
 .slider {
     position: relative;
-    width: 350px;
+    width: 100%;
 }
 
 .slider__track,
@@ -13,7 +13,7 @@
 .slider__track,
 .slider__range {
     border-radius: 3px;
-    height: 5px;
+    height: 50px;
 }
 
 .slider__track {
@@ -23,7 +23,7 @@
 }
 
 .slider__range {
-    background-color: #2cadf9;
+    
     z-index: 2;
 }
 
@@ -31,11 +31,11 @@
 .slider__right-value {
     color: #2cadf9;
     font-size: 12px;
-    margin-top: 20px;
+    margin-top: -20px;
 }
 
 .slider__left-value {
-    left: 6px;
+    
 }
 
 .slider__right-value {
@@ -53,7 +53,7 @@
     pointer-events: none;
     position: absolute;
     height: 0;
-    width: 350px;
+    width: 100%;
     outline: none;
 }
 
@@ -73,11 +73,11 @@
 .thumb::-webkit-slider-thumb {
     background-color: #2cadf9;
     border: none;
-    border-radius: 50%;
+    border-radius: 5%;
     cursor: pointer;
-    height: 18px;
-    width: 18px;
-    margin-top: 4px;
+    height: 3rem;
+    width: 8px;
+    margin-top: 3rem;
     pointer-events: all;
     position: relative;
 }

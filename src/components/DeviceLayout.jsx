@@ -23,7 +23,7 @@ const DeviceLayout = () => {
   const uploadFile = useRef("");
 
   return (
-    <article className={`${device}-layout`} style={{ padding: "56px 16px" }}>
+    <article className={`${device}_layout`} style={{ padding: "56px 16px" }}>
       <div
         style={{
           display: "flex",
@@ -69,11 +69,11 @@ const DeviceLayout = () => {
                 src={video_placeholder}
                 alt="비디오를 업로드해주세요."
                 style={
-                  device === "mobile" ? { marginBottom: "32px" } :
+                  (device === "mobile") ? { marginBottom: "32px", } :
                     {
                       width: "100%",
                       maxHeight: "inherit",
-                      marginBottom: "32px"
+                      marginBottom: "32px",
                     }
                 }
               ></img>
@@ -117,7 +117,7 @@ const DeviceLayout = () => {
               />
             </section>
             <section
-              style={device === "mobile" ? "" : { display: 'flex', gap: 16 }}
+              style={device === "mobile" ? {} : { display: 'flex', gap: 16 }}
             >
               <VideoConversionButton
                 onConversionStart={() => {

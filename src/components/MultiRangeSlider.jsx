@@ -43,7 +43,10 @@ export default function MultiRangeSlider({ min, max, onChange, disabled }) {
     }, [minVal, maxVal]);
 
     return (
-        <div>
+        <div style={{width: "97%"}}>
+            
+
+            <div className="slider">
             <input
                 type="range"
                 min={min}
@@ -72,12 +75,11 @@ export default function MultiRangeSlider({ min, max, onChange, disabled }) {
                 }}
                 className="thumb thumb--zindex-4"
             />
-
-            <div className="slider">
+                <div className="slider__left-value">{minVal}</div>
+                <div className="slider__right-value">{maxVal}</div>
                 <div className="slider__track"></div>
                 <div ref={range} className="slider__range"></div>
-                {/* <div className="slider__left-value">{minVal}</div>
-                <div className="slider__right-value">{maxVal}</div> */}
+                
             </div>
         </div>
     );
