@@ -1,12 +1,14 @@
+import { useContext, useEffect, useRef } from "react";
 import { Button } from "react-bootstrap";
 import styles from "../pages/VideoEditor/VideoEditor.module.css";
-
 import video_placeholder from "../assets/images/editor/video_placeholder.png";
 import VideoPlayer from "./VideoPlayer";
 import MultiRangeSlider from "./MultiRangeSlider";
-import VideoConversionButton from "../pages/VideoEditor/VideoConversionButton";
-import { useContext, useRef } from "react";
+import VideoConversionButton from "./VideoConversionButton";
+
 import { VideoEditorContext } from "../pages/VideoEditor/VideoEditor";
+import { fetchFile } from "@ffmpeg/ffmpeg";
+import { toTimeString } from "../utils/utils";
 
 const DeviceLayout = () => {
   const {
@@ -19,6 +21,20 @@ const DeviceLayout = () => {
     show, setShow,
     ffmpeg
   } = useContext(VideoEditorContext)
+
+  const sliderImagePath = '../assets/images/sliderImgaes'
+
+  const videoTosliderImages = async () => {
+    if (videoPlayerState) {
+      // ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(videoFile));
+      // await ffmpeg.run("-i", "input.mp4", "-r", `1/1`, `${sliderImagePath}/frame%d.png`)
+      // const data = ffmpeg.FS('readFile', `${sliderImagePath}/frame1..png`);
+      // console.log(data)
+    }
+  }
+  useEffect(() => {
+    videoTosliderImages()
+  }, [videoFile])
 
   const uploadFile = useRef("");
 
@@ -54,15 +70,17 @@ const DeviceLayout = () => {
       <section>
         {
           videoFile ? (
-            <VideoPlayer
+            <><VideoPlayer
               src={videoFile}
               onPlayerChange={(videoPlayer) => {
-                setVideoPlayer(videoPlayer)
+                setVideoPlayer(videoPlayer);
               }}
               onChange={(videoPlayerState) => {
-                setVideoPlayerState(videoPlayerState)
-              }}
-            />
+                setVideoPlayerState(videoPlayerState);
+              }} />
+              <div className="currTime" style={{ color: 'white' }}>
+                {`${toTimeString(Math.round(videoPlayerState.currentTime))}/${toTimeString(Math.round(videoPlayerState.duration))}`}
+              </div></>
           ) : (
             <>
               <img
@@ -95,9 +113,8 @@ const DeviceLayout = () => {
           )
         }
       </section>
-
       {
-        videoFile && (
+        videoFile && videoPlayerState && (
           <>
             <section
               style={{
@@ -114,6 +131,7 @@ const DeviceLayout = () => {
                 onChange={({ min, max }) => {
                   setSliderValues([min, max])
                 }}
+                duration={videoPlayerState.duration}
               />
             </section>
             <section

@@ -6,7 +6,7 @@ import styles from "./VideoEditor.module.css";
 import video_placeholder from "../../assets/images/editor/video_placeholder.png";
 import VideoPlayer from "../../components/VideoPlayer";
 import MultiRangeSlider from "../../components/MultiRangeSlider";
-import VideoConversionButton from "./VideoConversionButton";
+import VideoConversionButton from "../../components/VideoConversionButton";
 import { sliderValueToVideoTime } from "../../utils/utils";
 
 import useDeviceType from '../../hooks/useDeviceType';
@@ -41,9 +41,16 @@ const VideoEditor = () => {
 
 
   useEffect(() => {
-    const min = sliderValues[0]
-    if (min !== undefined && videoPlayerState && videoPlayer) {
-      videoPlayer.seek(sliderValueToVideoTime(videoPlayerState.duration, min));
+    const [min, max] = sliderValues;
+    if (min !== undefined && videoPlayerState && videoPlayer){
+      const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
+      const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
+      if (videoPlayerState.currentTime < minTime ) {
+        videoPlayer.seek(minTime);
+      }
+      if (videoPlayerState.currentTime > maxTime ) {
+        videoPlayer.seek(maxTime);
+      }
     }
   }, [sliderValues])
 
@@ -52,7 +59,6 @@ const VideoEditor = () => {
       const [min, max] = sliderValues;
       const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
       const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
-
       if (videoPlayerState.currentTime < minTime) {
         videoPlayer.seek(minTime);
       }
@@ -61,7 +67,6 @@ const VideoEditor = () => {
       }
     }
   }, [videoPlayerState])
-
 
   if (!ffmpegLoaded) return <div>load</div>;
 

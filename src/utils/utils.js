@@ -21,12 +21,12 @@ export const toTimeString = (sec, showMilliSeconds = true) => {
 
     let millisec = String(seconds).match(maltissaRegex);
     return (
-        hours +
-        ':' +
-        minutes +
+        (hours !== "00" ? hours +
+        ':' : "")
+        + minutes +
         ':' +
         String(seconds).replace(maltissaRegex, '') +
-        (showMilliSeconds ? (millisec ? millisec[0] : '.000') : '')
+        (showMilliSeconds ? (millisec ? millisec[0] : '') : '')
     );
 };
 
