@@ -6,6 +6,7 @@ import { sliderValueToVideoTime } from "../../utils/utils";
 
 import useDeviceType from '../../hooks/useDeviceType';
 import DeviceLayout from "../../components/DeviceLayout";
+import Footer from "../../components/Footer";
 const ffmpeg = createFFmpeg({ log: true });
 
 export const VideoEditorContext = React.createContext();
@@ -108,6 +109,7 @@ const VideoEditor = () => {
           </p>
         </div>
       </Modal>
+      {device !== 'mobile' ? <Footer /> : <></>}
     </VideoEditorContext.Provider>
 
   );

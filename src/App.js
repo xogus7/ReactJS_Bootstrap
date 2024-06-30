@@ -3,7 +3,10 @@ import VideoEditor from "./pages/VideoEditor/VideoEditor.jsx";
 
 
 function App() {
-  return <VideoEditor />;
+
+  return (
+      <VideoEditor /> 
+  );
 }
 
 export default App;

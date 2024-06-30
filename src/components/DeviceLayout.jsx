@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import { Button } from "react-bootstrap";
-import styles from "../pages/VideoEditor/VideoEditor.module.css";
 import video_placeholder from "../assets/images/editor/video_placeholder.png";
+import VE_White from "../assets/images/editor/VE_White.png"
 import VideoPlayer from "./VideoPlayer";
 import MultiRangeSlider from "./MultiRangeSlider";
 import VideoConversionButton from "./VideoConversionButton";
@@ -9,6 +9,8 @@ import VideoConversionButton from "./VideoConversionButton";
 import { VideoEditorContext } from "../pages/VideoEditor/VideoEditor";
 import { fetchFile } from "@ffmpeg/ffmpeg";
 import { toTimeString } from "../utils/utils";
+
+import './DeviceLayout.css';
 
 const DeviceLayout = () => {
   const {
@@ -39,18 +41,18 @@ const DeviceLayout = () => {
   const uploadFile = useRef("");
 
   return (
-    <article className={`${device}_layout`} style={{ padding: "56px 16px" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "16px",
-        }}
+    
+    <article className={`${device}_layout`}>
+      <header>
+        <div className="header_container">
+          <img src={VE_White} style={{paddingTop: 20}}/>
+        </div>
+      </header>
+      <div className="video_edit_title"
       >
-        <h1 className={styles.title}>Video Edit</h1>
+        <h1 className="title">Video Edit</h1>
         {videoFile && (
-          <div>
+          <div className="re_upload">
             <input onChange={(e) => setVideoFile(e.target.files[0])}
               type="file"
               accept="video/*"
@@ -59,15 +61,14 @@ const DeviceLayout = () => {
             />
             <Button
               onClick={() => uploadFile.current.click()}
-              className={styles.re__upload__btn}
-              style={{ width: "fit-content" }}
+              className='re__upload__btn'
             >
               비디오 재선택
             </Button>
           </div>
         )}
       </div>
-      <section>
+      <section className="video">
         {
           videoFile ? (
             <><VideoPlayer
@@ -78,23 +79,15 @@ const DeviceLayout = () => {
               onChange={(videoPlayerState) => {
                 setVideoPlayerState(videoPlayerState);
               }} />
-              <div className="currTime" style={{ color: 'white' }}>
+              <div className="currTime">
                 {videoPlayerState &&
                   `${toTimeString(Math.round(videoPlayerState.currentTime))}/${toTimeString(Math.round(videoPlayerState.duration))}`}
               </div></>
           ) : (
             <>
-              <img
+              <img className={`video_placeholder_img_${device}`}
                 src={video_placeholder}
                 alt="비디오를 업로드해주세요."
-                style={
-                  (device === "mobile") ? { marginBottom: "32px", } :
-                    {
-                      width: "100%",
-                      maxHeight: "inherit",
-                      marginBottom: "32px",
-                    }
-                }
               ></img>
               <div>
                 <input onChange={(e) => setVideoFile(e.target.files[0])}
@@ -104,7 +97,7 @@ const DeviceLayout = () => {
                   ref={uploadFile}
                 />
                 <Button
-                  className={styles.upload__btn}
+                  className="upload__btn"
                   onClick={() => uploadFile.current.click()}
                 >
                   비디오 업로드
@@ -117,18 +110,10 @@ const DeviceLayout = () => {
       {
         videoFile && videoPlayerState && (
           <>
-            <section
-              style={{
-                width: '100%',
-                marginTop: 30,
-                marginBottom: 62,
-                display: 'flex',
-                justifyContent: 'center'
-              }}
-            >
+            <section className="video_slider">
               <MultiRangeSlider
                 min={0}
-                curr={5}
+                curr={2}
                 max={100}
                 onChange={({ min, curr, max }) => {
                   setSliderValues([min, curr, max])
@@ -136,9 +121,7 @@ const DeviceLayout = () => {
                 duration={videoPlayerState.duration}
               />
             </section>
-            <section
-              style={device === "mobile" ? {} : { display: 'flex', gap: 16 }}
-            >
+            <section className={`video_conversion_${device}`}>
               <VideoConversionButton
                 onConversionStart={() => {
                   setProcessing(true);
