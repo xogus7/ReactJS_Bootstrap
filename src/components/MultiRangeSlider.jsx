@@ -1,17 +1,19 @@
-import { ChangeEvent, FC, useCallback, useEffect, useState, useRef } from 'react';
-import { toTimeString } from "../utils/utils";
+import {useCallback, useEffect, useState, useRef } from 'react';
 import classnames from 'classnames';
 import './MultiRangeSlider.css';
 
-export default function MultiRangeSlider({ min, max, onChange, disabled, duration }) {
+export default function MultiRangeSlider({ min, curr, max, onChange, disabled, duration }) {
     const [minVal, setMinVal] = useState(min);
     const [maxVal, setMaxVal] = useState(max);
+    const [currVal, setCurrVal] = useState(curr);
     const minValRef = useRef(null);
     const maxValRef = useRef(null);
+    const currValRef = useRef(null);
     const range = useRef(null);
     const [minValShow, setMinValShow] = useState(false)
     const [maxValShow, setMaxValShow] = useState(false)
-    const rangeWidth = 97 // %
+    const [currValShow, setCurrValShow] = useState(false)
+    const rangeWidth = 98 // %
     let c = 0
     const rangeValueStyle = (value) => {
         return ({
@@ -49,8 +51,8 @@ export default function MultiRangeSlider({ min, max, onChange, disabled, duratio
 
     // Get min and max values when their state changes
     useEffect(() => {
-        onChange({ min: minVal, max: maxVal });
-    }, [minVal, maxVal]);
+        onChange({ min: minVal, curr: currVal ,max: maxVal });
+    }, [minVal, currVal, maxVal]);
 
     // toFixed(2)
     const valueToVideoTime = (value) => {
@@ -79,6 +81,28 @@ export default function MultiRangeSlider({ min, max, onChange, disabled, duratio
                     onMouseLeave={() => setMinValShow(false)}
                 />
                 <input
+                    content=';'
+                    type="range"
+                    min={min}
+                    max={max}
+                    value={currVal}
+                    ref={currValRef}
+                    onChange={(event) => {
+                        let value = +event.target.value;
+                        if (value <= minVal)
+                            value = minVal;
+                        else if (value >= maxVal)
+                            value = maxVal;
+                        setCurrVal(value);
+                        event.target.value = value.toString();
+                    }}
+                    className={classnames('thumb thumb--zindex-3', {
+                        'thumb--zindex-5 currVal': currVal > max - 100,
+                    })}
+                    onMouseEnter={() => setCurrValShow(true)}
+                    onMouseLeave={() => setCurrValShow(false)}
+                />
+                <input
                     type="range"
                     min={min}
                     max={max}
@@ -95,6 +119,9 @@ export default function MultiRangeSlider({ min, max, onChange, disabled, duratio
                 />
                 {minValShow && <div className="slider__left-value" style={rangeValueStyle(minVal)}>
                     {valueToVideoTime(minVal)}
+                </div>}
+                {currValShow && <div className="slider__curr-value" style={rangeValueStyle(currVal)}>
+                    {valueToVideoTime(currVal)}
                 </div>}
                 {maxValShow && <div className="slider__right-value" style={rangeValueStyle(maxVal)}>
                     {valueToVideoTime(maxVal)}

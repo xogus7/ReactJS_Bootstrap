@@ -79,7 +79,8 @@ const DeviceLayout = () => {
                 setVideoPlayerState(videoPlayerState);
               }} />
               <div className="currTime" style={{ color: 'white' }}>
-                {`${toTimeString(Math.round(videoPlayerState.currentTime))}/${toTimeString(Math.round(videoPlayerState.duration))}`}
+                {videoPlayerState &&
+                  `${toTimeString(Math.round(videoPlayerState.currentTime))}/${toTimeString(Math.round(videoPlayerState.duration))}`}
               </div></>
           ) : (
             <>
@@ -127,9 +128,10 @@ const DeviceLayout = () => {
             >
               <MultiRangeSlider
                 min={0}
+                curr={5}
                 max={100}
-                onChange={({ min, max }) => {
-                  setSliderValues([min, max])
+                onChange={({ min, curr, max }) => {
+                  setSliderValues([min, curr, max])
                 }}
                 duration={videoPlayerState.duration}
               />

@@ -10,7 +10,7 @@
 4. 해당 브랜치에서 Pull Request를 생성합니다.
 5. PR제목은 프로젝트1*Video Editor*팀명\_이름으로 통일해주세요.
 
-- eg.g project1/Videoo Editor/team1/오스틴
+- eg.g project1/Video Editor/team1/오스틴
 
 6. label을 적극적으로 활용해주세요.
 

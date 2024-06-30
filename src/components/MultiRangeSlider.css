@@ -6,6 +6,7 @@
 .slider__track,
 .slider__range,
 .slider__left-value,
+.slider__curr-value,
 .slider__right-value {
     position: absolute;
 }
@@ -28,6 +29,7 @@
 }
 
 .slider__left-value,
+.slider__curr-value,
 .slider__right-value {
     color: #2cadf9;
     font-size: 12px;
@@ -71,17 +73,22 @@
 
 /* For Chrome browsers */
 .thumb::-webkit-slider-thumb {
-    background-color: #2cadf9;
-    border: none;
+    background-color: black;
+    color: black;
+    border: 6px solid white;
     border-radius: 5%;
     cursor: pointer;
-    height: 3rem;
-    width: 8px;
-    margin-top: 3rem;
+    height: 3.2rem;
+    width: 15px;
+    margin-top: 3.1rem;
     pointer-events: all;
     position: relative;
 }
-
+.currVal::-webkit-slider-thumb{
+    background-color: white;
+    border: none;
+    width: 5px;
+}
 /* For Firefox browsers */
 .thumb::-moz-range-thumb {
     background-color: #2cadf9;
@@ -94,3 +101,4 @@
     pointer-events: all;
     position: relative;
 }
+

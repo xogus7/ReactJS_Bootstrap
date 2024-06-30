@@ -1,12 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
-import { Button, Modal, Spinner, Toast, ToastContainer } from "react-bootstrap";
-import styles from "./VideoEditor.module.css";
+import { Modal, Spinner, Toast, ToastContainer } from "react-bootstrap";
 
-import video_placeholder from "../../assets/images/editor/video_placeholder.png";
-import VideoPlayer from "../../components/VideoPlayer";
-import MultiRangeSlider from "../../components/MultiRangeSlider";
-import VideoConversionButton from "../../components/VideoConversionButton";
 import { sliderValueToVideoTime } from "../../utils/utils";
 
 import useDeviceType from '../../hooks/useDeviceType';
@@ -19,13 +14,13 @@ const VideoEditor = () => {
   const device = useDeviceType();
 
   const [ffmpegLoaded, setFFmpegLoaded] = useState(false);
-  const [sliderValues, setSliderValues] = useState([0, 100]);
+  const [sliderValues, setSliderValues] = useState([0, 1, 100]);
   const [videoFile, setVideoFile] = useState();
   const [videoPlayerState, setVideoPlayerState] = useState();
   const [videoPlayer, setVideoPlayer] = useState();
   const [processing, setProcessing] = useState(false);
   const [show, setShow] = useState(false);
-
+  const [currentVideoTime, setCurrentVideoTime] = useState();
 
   useEffect(() => {
     ffmpeg.load().then(() => {
@@ -38,13 +33,15 @@ const VideoEditor = () => {
       setVideoPlayerState(undefined);
     }
   }, [videoFile])
-
+  
 
   useEffect(() => {
-    const [min, max] = sliderValues;
+    const [min, curr, max] = sliderValues;
     if (min !== undefined && videoPlayerState && videoPlayer){
       const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
+      const currTime = (videoPlayerState.duration * curr) / 100;
       const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
+      videoPlayer.seek(currTime);
       if (videoPlayerState.currentTime < minTime ) {
         videoPlayer.seek(minTime);
       }
@@ -56,7 +53,7 @@ const VideoEditor = () => {
 
   useEffect(() => {
     if (videoPlayer && videoPlayerState) {
-      const [min, max] = sliderValues;
+      const [min, curr, max] = sliderValues;
       const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
       const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
       if (videoPlayerState.currentTime < minTime) {
