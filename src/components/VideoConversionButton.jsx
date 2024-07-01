@@ -9,9 +9,10 @@ function VideoConversionButton({
     sliderValues,
     videoFile,
     ffmpeg,
-    onConversionStart = () => {},
-    onConversionEnd = () => {},
-    onGifCreated = () => {},
+    onConversionStart = () => { },
+    onConversionEnd = () => { },
+    onConversionFail = () => { },
+    onGifCreated = () => { },
 }) {
     const convertToGif = async () => {
         // starting the conversion process
@@ -20,26 +21,33 @@ function VideoConversionButton({
         const inputFileName = 'input.mp4';
         const outputFileName = 'output.gif';
 
-        // writing the video file to memory
-        ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
+        try {
+            // writing the video file to memory
+            ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
 
-        const [min, max] = sliderValues;
-        const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
-        const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
+            const [min, max] = sliderValues;
+            const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
+            const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
 
-        // cutting the video and converting it to GIF with a FFMpeg command
-        await ffmpeg.run('-i', inputFileName, '-ss', `${minTime}`, '-to', `${maxTime}`, '-f', 'gif', outputFileName);
+            // cutting the video and converting it to GIF with a FFMpeg command
+            await ffmpeg.run('-i', inputFileName, '-ss', `${minTime}`, '-to', `${maxTime}`, '-f', 'gif', outputFileName);
 
-        // reading the resulting file
-        const data = ffmpeg.FS('readFile', outputFileName);
+            // reading the resulting file
+            const data = ffmpeg.FS('readFile', outputFileName);
 
-        // converting the GIF file created by FFmpeg to a valid image URL
-        const gifUrl = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }));
+            // converting the GIF file created by FFmpeg to a valid image URL
+            const gifUrl = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }));
 
-        const link = document.createElement('a');
-        link.href = gifUrl;
-        link.setAttribute('download', '');
-        link.click();
+            const link = document.createElement('a');
+            link.href = gifUrl;
+            link.setAttribute('download', '');
+            link.click();
+        } catch (error) {
+            console.log(error);
+            onConversionFail(false);
+            return;
+        }
+
 
         // ending the conversion process
 
@@ -54,17 +62,23 @@ function VideoConversionButton({
         const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
         const inputFileName = 'input.mp4';
         const outputFileName = 'output.mp4';
+        try {
+            ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
+            await ffmpeg.run('-ss', `${minTime}`, '-i', 'input.mp4', '-t', `${maxTime}`, '-c', 'copy', `${outputFileName}`);
 
-        ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
-        await ffmpeg.run('-ss', `${minTime}`, '-i', 'input.mp4', '-t', `${maxTime}`, '-c', 'copy', `${outputFileName}`);
+            const data = ffmpeg.FS('readFile', outputFileName);
+            const dataURL = await readFileAsBase64(new Blob([data.buffer], { type: 'video/mp4' }));
 
-        const data = ffmpeg.FS('readFile', outputFileName);
-        const dataURL = await readFileAsBase64(new Blob([data.buffer], { type: 'video/mp4' }));
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.setAttribute('download', '');
+            link.click();
+        } catch (error) {
+            console.log(error);
+            onConversionFail(false);
+            return;
+        }
 
-        const link = document.createElement('a');
-        link.href = dataURL;
-        link.setAttribute('download', '');
-        link.click();
 
         onConversionEnd(false);
     };
@@ -78,16 +92,23 @@ function VideoConversionButton({
         const inputFileName = 'input.mp4';
         const outputFileName = 'output.mp3';
 
-        ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
-        await ffmpeg.run('-i', inputFileName, '-ss', `${minTime}`, '-t', `${maxTime}`, '-acodec', 'copy', outputFileName);
+        try {
+            ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
+            await ffmpeg.run('-i', inputFileName, '-ss', `${minTime}`, '-to', `${maxTime}`, '-q:a', '0', '-f', 'mp3', outputFileName);
 
-        const data = ffmpeg.FS('readFile', outputFileName);
-        const dataURL = URL.createObjectURL(new Blob([data.buffer], { type: 'audio/mp3' }))
+            const data = ffmpeg.FS('readFile', outputFileName);
+            const dataURL = URL.createObjectURL(new Blob([data.buffer], { type: 'audio/mp3' }))
 
-        const link = document.createElement('a');
-        link.href = dataURL;
-        link.setAttribute('download', '');
-        link.click();
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.setAttribute('download', '');
+            link.click();
+
+        } catch (error) {
+            console.log(error);
+            onConversionFail(false);
+            return;
+        }
 
         onConversionEnd(false);
     };
@@ -104,7 +125,7 @@ function VideoConversionButton({
                 <p style={{ color: '#383838', fontSize: 16, fontWeight: 700 }}>비디오 저장</p>
             </Button>
             <Button onClick={() => converToAudio()} className="gif__out__btn">
-                <img src={audio_icon} alt="오디오 추출" style={{width: '20px', height: '20px'}}/>
+                <img src={audio_icon} alt="오디오 추출" style={{ width: '20px', height: '20px' }} />
                 <p style={{ color: '#383838', fontSize: 16, fontWeight: 700 }}>오디오 추출</p>
             </Button>
         </>

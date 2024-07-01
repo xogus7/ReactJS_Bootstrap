@@ -20,7 +20,8 @@ const DeviceLayout = () => {
     videoPlayerState, setVideoPlayerState,
     videoPlayer, setVideoPlayer,
     processing, setProcessing,
-    show, setShow,
+    showSuccess, setShowSuccess,
+    showFail, setShowFail,
     ffmpeg
   } = useContext(VideoEditorContext)
 
@@ -137,7 +138,11 @@ const DeviceLayout = () => {
                 }}
                 onConversionEnd={() => {
                   setProcessing(false);
-                  setShow(true);
+                  setShowSuccess(true);
+                }}
+                onConversionFail={() => {
+                  setProcessing(false);
+                  setShowFail(true);
                 }}
                 ffmpeg={ffmpeg}
                 videoPlayerState={videoPlayerState}

@@ -20,7 +20,8 @@ const VideoEditor = () => {
   const [videoPlayerState, setVideoPlayerState] = useState();
   const [videoPlayer, setVideoPlayer] = useState();
   const [processing, setProcessing] = useState(false);
-  const [show, setShow] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showFail, setShowFail] = useState(false);
   const [currentVideoTime, setCurrentVideoTime] = useState();
 
   useEffect(() => {
@@ -77,17 +78,24 @@ const VideoEditor = () => {
         videoPlayerState, setVideoPlayerState,
         videoPlayer, setVideoPlayer,
         processing, setProcessing,
-        show, setShow,
+        showSuccess, setShowSuccess,
+        showFail, setShowFail,
         ffmpeg
       }}
     >
       <DeviceLayout />
       <ToastContainer className="p-3" position={'top-center'} style={{ zIndex: 1 }}>
-        <Toast onClose={() => setShow(false)} show={show} delay={2000} bg="dark" autohide>
+        <Toast onClose={() => setShowSuccess(false)} show={showSuccess} delay={2000} bg="dark" autohide>
           <Toast.Header closeButton={false}>
             <strong className="me-auto">Video Editor</strong>
           </Toast.Header>
           <Toast.Body>내보내기가 완료되었습니다.</Toast.Body>
+        </Toast>
+        <Toast onClose={() => setShowFail(false)} show={showFail} delay={2000} bg="dark" autohide>
+          <Toast.Header closeButton={false}>
+            <strong className="me-auto">Video Editor</strong>
+          </Toast.Header>
+          <Toast.Body>내보내기를 실패했습니다.</Toast.Body>
         </Toast>
       </ToastContainer>
 
