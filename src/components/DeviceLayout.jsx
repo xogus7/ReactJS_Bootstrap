@@ -1,21 +1,22 @@
 import { useContext, useEffect, useRef } from "react";
 import { Button } from "react-bootstrap";
-import video_placeholder from "../assets/images/editor/video_placeholder.png";
-import VE_White from "../assets/images/editor/VE_White.png"
-import VideoPlayer from "./VideoPlayer";
-import MultiRangeSlider from "./MultiRangeSlider";
-import VideoConversionButton from "./VideoConversionButton";
-
-import { VideoEditorContext } from "../pages/VideoEditor/VideoEditor";
 import { fetchFile } from "@ffmpeg/ffmpeg";
 import { toTimeString } from "../utils/utils";
 
+import video_placeholder from "../assets/images/editor/video_placeholder.png";
+import VE_White from "../assets/images/editor/VE_White.png"
+
+import { VideoEditorContext } from "../pages/VideoEditor/VideoEditor";
+import VideoPlayer from "./VideoPlayer";
+import MultiRangeSlider from "./MultiRangeSlider";
+import VideoConversionButton from "./VideoConversionButton";
 import './DeviceLayout.css';
 
 const DeviceLayout = () => {
   const {
     device,
     sliderValues, setSliderValues,
+    currentVideoValue, setCurrentVideoValue,
     videoFile, setVideoFile,
     videoPlayerState, setVideoPlayerState,
     videoPlayer, setVideoPlayer,
@@ -72,33 +73,30 @@ const DeviceLayout = () => {
       <section className="video">
         {
           videoFile ? (
-            <><VideoPlayer
-              src={videoFile}
-              onPlayerChange={(videoPlayer) => {
-                setVideoPlayer(videoPlayer);
-              }}
-              onChange={(videoPlayerState) => {
-                setVideoPlayerState(videoPlayerState);
-              }} />
+            <>
+              <VideoPlayer
+                src={videoFile}
+                onPlayerChange={(videoPlayer) => setVideoPlayer(videoPlayer)}
+                onChange={(videoPlayerState) => setVideoPlayerState(videoPlayerState)}
+              />
               <div className="currTime">
                 {videoPlayerState &&
                   `${toTimeString(Math.round(videoPlayerState.currentTime))}/${toTimeString(Math.round(videoPlayerState.duration))}`}
-              </div></>
+              </div>
+            </>
           ) : (
             <>
               <img className={`video_placeholder_img_${device}`}
                 src={video_placeholder}
                 alt="비디오를 업로드해주세요."
-                onDragOver={(e) => {
-                  e.preventDefault();
-                }}
+                onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   e.preventDefault();
                   const droppedFile = e.dataTransfer.files[0];
                   setVideoFile(droppedFile);
                 }}
                 onClick={() => uploadFile.current.click()}
-              ></img>
+              />
               <div>
                 <input onChange={(e) => setVideoFile(e.target.files[0])}
                   type="file"
@@ -123,19 +121,18 @@ const DeviceLayout = () => {
             <section className="video_slider">
               <MultiRangeSlider
                 min={0}
-                curr={2}
+                curr={videoPlayerState.currentTime}
                 max={100}
                 onChange={({ min, curr, max }) => {
-                  setSliderValues([min, curr, max])
+                  setSliderValues([min, max])
+                  setCurrentVideoValue(curr)
                 }}
                 duration={videoPlayerState.duration}
               />
             </section>
             <section className={`video_conversion_${device}`}>
               <VideoConversionButton
-                onConversionStart={() => {
-                  setProcessing(true);
-                }}
+                onConversionStart={() => setProcessing(true)}
                 onConversionEnd={() => {
                   setProcessing(false);
                   setShowSuccess(true);

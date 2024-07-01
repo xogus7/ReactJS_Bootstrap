@@ -1,28 +1,27 @@
 import React, { useState, useRef, useEffect } from "react";
-import { createFFmpeg } from "@ffmpeg/ffmpeg";
 import { Modal, Spinner, Toast, ToastContainer } from "react-bootstrap";
-
+import { createFFmpeg } from "@ffmpeg/ffmpeg";
 import { sliderValueToVideoTime } from "../../utils/utils";
 
 import useDeviceType from '../../hooks/useDeviceType';
 import DeviceLayout from "../../components/DeviceLayout";
 import Footer from "../../components/Footer";
-const ffmpeg = createFFmpeg({ log: true });
 
 export const VideoEditorContext = React.createContext();
+const ffmpeg = createFFmpeg({ log: true });
 
 const VideoEditor = () => {
   const device = useDeviceType();
-
+  const $videoPlayerDiv = document.querySelector(".video-player")
   const [ffmpegLoaded, setFFmpegLoaded] = useState(false);
-  const [sliderValues, setSliderValues] = useState([0, 1, 100]);
+  const [sliderValues, setSliderValues] = useState([0, 100]);
   const [videoFile, setVideoFile] = useState();
   const [videoPlayerState, setVideoPlayerState] = useState();
   const [videoPlayer, setVideoPlayer] = useState();
   const [processing, setProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showFail, setShowFail] = useState(false);
-  const [currentVideoTime, setCurrentVideoTime] = useState();
+  const [currentVideoValue, setCurrentVideoValue] = useState(0);
 
   useEffect(() => {
     ffmpeg.load().then(() => {
@@ -36,14 +35,19 @@ const VideoEditor = () => {
     }
   }, [videoFile])
   
+  useEffect(() => {
+    if (videoPlayer && videoPlayerState) {
+      const currTime = (videoPlayerState.duration * currentVideoValue) / 100;
+      !isPlaying() && videoPlayer.seek(currTime);
+  }
+  }, [currentVideoValue])
+
 
   useEffect(() => {
-    const [min, curr, max] = sliderValues;
+    const [min, max] = sliderValues;
     if (min !== undefined && videoPlayerState && videoPlayer){
       const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
-      const currTime = (videoPlayerState.duration * curr) / 100;
       const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
-      videoPlayer.seek(currTime);
       if (videoPlayerState.currentTime < minTime ) {
         videoPlayer.seek(minTime);
       }
@@ -53,9 +57,10 @@ const VideoEditor = () => {
     }
   }, [sliderValues])
 
+
   useEffect(() => {
     if (videoPlayer && videoPlayerState) {
-      const [min, curr, max] = sliderValues;
+      const [min, max] = sliderValues;
       const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
       const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
       if (videoPlayerState.currentTime < minTime) {
@@ -69,11 +74,16 @@ const VideoEditor = () => {
 
   if (!ffmpegLoaded) return <div>load</div>;
 
+  const isPlaying = () => {
+    return $videoPlayerDiv.firstElementChild.classList.toString().includes("playing");
+  }
+
   return (
     <VideoEditorContext.Provider
       value={{
         device,
         sliderValues, setSliderValues,
+        currentVideoValue, setCurrentVideoValue,
         videoFile, setVideoFile,
         videoPlayerState, setVideoPlayerState,
         videoPlayer, setVideoPlayer,
@@ -107,17 +117,14 @@ const VideoEditor = () => {
         centered
         size="sm"
       >
-        <div style={{ textAlign: 'center' }}>
+        <div className="loading_container">
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-
-          <p style={{ marginTop: 16, fontSize: 14, fontWeight: 600, color: '#c8c8c8' }}>
-            내보내기가 진행중입니다.
-          </p>
+          <p>내보내기가 진행중입니다.</p>
         </div>
       </Modal>
-      {device !== 'mobile' ? <Footer /> : <></>}
+      {device !== 'mobile' && <Footer />}
     </VideoEditorContext.Provider>
 
   );
