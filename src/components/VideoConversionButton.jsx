@@ -56,12 +56,14 @@ function VideoConversionButton({
 
     const onCutTheVideo = async () => {
         onConversionStart(true);
-
+        
+        const inputFileName = 'input.mp4';
+        const outputFileName = 'output.mp4';
+        
         const [min, max] = sliderValues;
         const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
         const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
-        const inputFileName = 'input.mp4';
-        const outputFileName = 'output.mp4';
+        
         try {
             ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
             await ffmpeg.run('-ss', `${minTime}`, '-i', 'input.mp4', '-t', `${maxTime}`, '-c', 'copy', `${outputFileName}`);
@@ -86,18 +88,18 @@ function VideoConversionButton({
     const converToAudio = async () => {
         onConversionStart(true);
 
+        const inputFileName = 'input.mp4';
+        const outputFileName = 'output.mp3';
+
         const [min, max] = sliderValues;
         const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
         const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
-        const inputFileName = 'input.mp4';
-        const outputFileName = 'output.mp3';
 
         try {
             ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
             await ffmpeg.run('-i', inputFileName, '-ss', `${minTime}`, '-to', `${maxTime}`, '-q:a', '0', '-f', 'mp3', outputFileName);
-
             const data = ffmpeg.FS('readFile', outputFileName);
-            const dataURL = URL.createObjectURL(new Blob([data.buffer], { type: 'audio/mp3' }))
+            const dataURL = URL.createObjectURL(new Blob([data.buffer], { type: 'audio/mp3' }));
 
             const link = document.createElement('a');
             link.href = dataURL;

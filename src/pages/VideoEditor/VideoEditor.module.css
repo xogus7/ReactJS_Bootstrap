@@ -1,0 +1,10 @@
+.loading_container {
+    text-align: center;
+}
+
+.loading_container p {
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #c8c8c8; 
+}

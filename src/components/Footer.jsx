@@ -4,11 +4,11 @@ const Footer = () => {
   return (
     <footer className='footer'>
       <div className='footer_container'>
-        <div class="info">
+        <div className="info">
         <img src={VE} />
         </div>
-        <div class="contact">
-          <ul class="contact_info">
+        <div className="contact">
+          <ul className="contact_info">
             <li>Email: xogus2676@gmail.com</li>
             <li>GitHub: <a
                 href="https://github.com/xogus7"

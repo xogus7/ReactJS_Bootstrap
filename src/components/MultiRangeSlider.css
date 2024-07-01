@@ -88,6 +88,7 @@
     background-color: white;
     border: none;
     width: 5px;
+    height: 3.6rem;
 }
 /* For Firefox browsers */
 .thumb::-moz-range-thumb {
