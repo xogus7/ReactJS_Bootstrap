@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import { fetchFile } from "@ffmpeg/ffmpeg";
 import { toTimeString } from "../utils/utils";
@@ -26,20 +26,6 @@ const DeviceLayout = () => {
     ffmpeg
   } = useContext(VideoEditorContext)
 
-  const sliderImagePath = '../assets/images/sliderImgaes'
-
-  const videoTosliderImages = async () => {
-    if (videoPlayerState) {
-      // ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(videoFile));
-      // await ffmpeg.run("-i", "input.mp4", "-r", `1/1`, `${sliderImagePath}/frame%d.png`)
-      // const data = ffmpeg.FS('readFile', `${sliderImagePath}/frame1..png`);
-      // console.log(data)
-    }
-  }
-  useEffect(() => {
-    videoTosliderImages()
-  }, [videoFile])
-
   const uploadFile = useRef("");
 
   return (
@@ -47,7 +33,7 @@ const DeviceLayout = () => {
     <article className={`${device}_layout`}>
       <header>
         <div className="header_container">
-          <img src={VE_White} />
+        <img src={VE_White} />
         </div>
       </header>
       <div className="video_edit_title"

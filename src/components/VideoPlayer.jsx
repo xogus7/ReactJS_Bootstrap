@@ -26,7 +26,7 @@ const VideoPlayer = ({ src, onPlayerChange, onChange, startTime = undefined }) =
   }, [player])
   
   return (
-    <div className='video-player'>
+    <div className='video-player' style={{objectFit: 'cover'}}>
       <Player
         width={'100%'}
         ref={(player) => {

@@ -45,9 +45,10 @@ header {
 .upload__btn {
     width: 100%;
     border-radius: 8px;
-    background-color: #383838;
-    border: 1px solid #383838;
+    background-color: #0d6efd !important;
+    border: 1px solid #0d6efd !important;
     padding: 16px 8px;
+    margin-bottom: 85px;
     color: #fff;
     text-align: center;
     font-family: SUIT;
@@ -57,16 +58,16 @@ header {
     line-height: normal;
 }
 
-.upload__btn &:hover, &:focus, &:active {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
+.upload__btn:hover, &:focus, &:active {
+    background-color: #383838 !important;
+    border-color: #383838 !important;
 }
 
 .re__upload__btn {
     width: fit-content;
     border-radius: 8px;
-    background-color: #383838;
-    border: 1px solid #383838;
+    background-color: #0d6efd !important;
+    border: 1px solid #0d6efd !important;
     padding: 8px;
     color: #fff;
     text-align: center;
@@ -78,9 +79,9 @@ header {
     line-height: normal;
 }
 
-.re__upload__btn &:hover, &:focus, &:active {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
+.re__upload__btn:hover, &:focus, &:active {
+    background-color: #383838 !important;
+    border-color: #383838 !important;
 }
 
 .video_placeholder_img_mobile {

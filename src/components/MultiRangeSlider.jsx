@@ -1,10 +1,12 @@
-import {useCallback, useEffect, useState, useRef, useContext } from 'react';
+import { useCallback, useEffect, useState, useRef, useContext } from 'react';
 import classnames from 'classnames';
 import './MultiRangeSlider.css';
 import { VideoEditorContext } from '../pages/VideoEditor/VideoEditor';
+import { fetchFile } from '@ffmpeg/ffmpeg';
+import { toTimeString } from '../utils/utils';
 
 export default function MultiRangeSlider({ min, curr, max, onChange, disabled, duration }) {
-    const {videoPlayerState} = useContext(VideoEditorContext);
+    const { ffmpeg, videoFile, videoPlayer, videoPlayerState } = useContext(VideoEditorContext);
     const [minVal, setMinVal] = useState(min);
     const [maxVal, setMaxVal] = useState(max);
     const [currVal, setCurrVal] = useState(curr);
@@ -15,6 +17,8 @@ export default function MultiRangeSlider({ min, curr, max, onChange, disabled, d
     const [minValShow, setMinValShow] = useState(false)
     const [maxValShow, setMaxValShow] = useState(false)
     const [currValShow, setCurrValShow] = useState(false)
+    const [imageUrls, setImageUrls] = useState([])
+
     const rangeWidth = 98 // %
     let c = 0
     const rangeValueStyle = (value) => {
@@ -53,13 +57,13 @@ export default function MultiRangeSlider({ min, curr, max, onChange, disabled, d
 
     // Get min and max values when their state changes
     useEffect(() => {
-        onChange({ min: minVal, curr: currVal ,max: maxVal });
+        onChange({ min: minVal, curr: currVal, max: maxVal });
     }, [minVal, currVal, maxVal]);
-    
+
     // 재생 시간에 따른 재생바 동기화
     useEffect(() => {
-        if (videoPlayerState){
-            setCurrVal((videoPlayerState.currentTime / videoPlayerState.duration) * 100)
+        if (videoPlayerState) {
+            setCurrVal((videoPlayerState.currentTime / duration) * 100)
         }
     }, [videoPlayerState])
 
@@ -76,6 +80,32 @@ export default function MultiRangeSlider({ min, curr, max, onChange, disabled, d
         setCurrVal(value);
         event.target.value = value.toString();
     }
+
+    const videoToSliderImages = async () => {
+        let imgURL = []
+        if (videoPlayer && videoPlayerState && videoPlayerState.duration) {
+            try {
+
+                ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(videoFile));
+                await ffmpeg.run("-skip_frame", "nokey", "-i", "input.mp4", "-vf", `fps=1/${videoPlayerState.duration / 11}`, `frame%d.png`);
+                for (let i = 1; i <= 10; i++) {
+                    const data = ffmpeg.FS('readFile', `frame${i}.png`);
+                    const dataURL = URL.createObjectURL(new Blob([data.buffer], { type: 'image/png' }));
+                    imgURL.push(dataURL);
+                }
+
+            } catch (error) {
+                console.log(error);
+                return;
+            }
+            setImageUrls(imgURL);
+        }
+    }
+    useEffect(() => {
+        setImageUrls([]);
+        videoToSliderImages();
+    }, [videoPlayerState.duration])
+
     return (
         <div style={{ width: `${rangeWidth}%` }}>
 
@@ -125,16 +155,24 @@ export default function MultiRangeSlider({ min, curr, max, onChange, disabled, d
                     onMouseLeave={() => setMaxValShow(false)}
                 />
                 {minValShow && <div className="slider__left-value" style={rangeValueStyle(minVal)}>
-                    {valueToVideoTime(minVal)}
+                    {toTimeString(valueToVideoTime(minVal))}
                 </div>}
                 {currValShow && <div className="slider__curr-value" style={rangeValueStyle(currVal)}>
-                    {valueToVideoTime(currVal)}
+                    {toTimeString(valueToVideoTime(currVal))}
                 </div>}
                 {maxValShow && <div className="slider__right-value" style={rangeValueStyle(maxVal)}>
-                    {valueToVideoTime(maxVal)}
+                    {toTimeString(valueToVideoTime(maxVal))}
                 </div>}
-                <div className="slider__track"></div>
-                <div ref={range} className="slider__range"></div>
+                <div className="slider__track">
+                    {imageUrls.map((url, index) => (
+                        <div className="sliderImage_container">
+                            <img src={url} alt={`Image ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
+                    ))}
+                </div>
+                <div ref={range} className="slider__range" style={{ color: 'white' }}>
+                    {!imageUrls.length && <> Loaing TimeLine Thumbnail..</>}
+                </div>
             </div>
         </div>
     );
