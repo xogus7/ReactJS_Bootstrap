@@ -45,7 +45,7 @@ const DeviceLayout = () => {
     <article className={`${device}_layout`}>
       <header>
         <div className="header_container">
-          <img src={VE_White} style={{paddingTop: 20}}/>
+          <img src={VE_White} />
         </div>
       </header>
       <div className="video_edit_title"
@@ -88,6 +88,15 @@ const DeviceLayout = () => {
               <img className={`video_placeholder_img_${device}`}
                 src={video_placeholder}
                 alt="비디오를 업로드해주세요."
+                onDragOver={(e) => {
+                  e.preventDefault();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const droppedFile = e.dataTransfer.files[0];
+                  setVideoFile(droppedFile);
+                }}
+                onClick={() => uploadFile.current.click()}
               ></img>
               <div>
                 <input onChange={(e) => setVideoFile(e.target.files[0])}

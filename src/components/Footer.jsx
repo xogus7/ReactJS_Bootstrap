@@ -10,22 +10,12 @@ const Footer = () => {
         <div class="contact">
           <ul class="contact_info">
             <li>Email: xogus2676@gmail.com</li>
-            <li>
-              <a
-                href="https://blackmilkt.tistory.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Blog
-              </a>
-            </li>
-            <li>
-              <a
+            <li>GitHub: <a
                 href="https://github.com/xogus7"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                GitHub
+                https://github.com/xogus7
               </a>
             </li>
           </ul>
