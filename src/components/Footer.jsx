@@ -1,11 +1,20 @@
+import { useContext } from "react";
+import VE_White from "../assets/images/editor/VE_White.png"
+import VE_Black from "../assets/images/editor/VE_Black.png"
+import { ThemeContext } from "../App";
 import "./Footer.css";
-import VE from "../assets/images/editor/VE_Black.png"
+
 const Footer = () => {
+
+  const [mode] = useContext(ThemeContext);
+  
+
+
   return (
     <footer className='footer'>
       <div className='footer_container'>
         <div className="info">
-        <img src={VE} />
+        <img src={mode === "dark" ? VE_White : VE_Black } />
         </div>
         <div className="contact">
           <ul className="contact_info">

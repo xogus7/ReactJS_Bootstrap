@@ -13,6 +13,11 @@ header {
     max-width: 740px;
 }
 
+.toggleDarkMode_button {
+    background-color: var(--backgroun-color);
+    border: none;
+}
+
 .mobile_layout {
     width: 393px;
     margin: 0 auto;
@@ -33,7 +38,7 @@ header {
 }
 
 .title {
-    color: #fff;
+    color: var(--font-color);
     font-family: SUIT;
     font-size: 20px;
     font-style: normal;
@@ -48,7 +53,7 @@ header {
     background-color: #0d6efd !important;
     border: 1px solid #0d6efd !important;
     padding: 16px 8px;
-    margin-bottom: 85px;
+    margin-bottom: 86px;
     color: #fff;
     text-align: center;
     font-family: SUIT;
@@ -103,7 +108,7 @@ header {
 }
 
 .currTime {
-    color: white;
+    color: var(--font-color);
     justify-content: center;
     align-items: center;
     text-align: center;

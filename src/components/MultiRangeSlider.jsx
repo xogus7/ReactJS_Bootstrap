@@ -85,7 +85,6 @@ export default function MultiRangeSlider({ min, curr, max, onChange, disabled, d
         let imgURL = []
         if (videoPlayer && videoPlayerState && videoPlayerState.duration) {
             try {
-
                 ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(videoFile));
                 await ffmpeg.run("-skip_frame", "nokey", "-i", "input.mp4", "-vf", `fps=1/${videoPlayerState.duration / 11}`, `frame%d.png`);
                 for (let i = 1; i <= 10; i++) {

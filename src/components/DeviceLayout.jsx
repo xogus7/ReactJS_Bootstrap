@@ -5,8 +5,10 @@ import { toTimeString } from "../utils/utils";
 
 import video_placeholder from "../assets/images/editor/video_placeholder.png";
 import VE_White from "../assets/images/editor/VE_White.png"
+import VE_Black from "../assets/images/editor/VE_Black.png"
 
 import { VideoEditorContext } from "../pages/VideoEditor/VideoEditor";
+import { ThemeContext } from "../App";
 import VideoPlayer from "./VideoPlayer";
 import MultiRangeSlider from "./MultiRangeSlider";
 import VideoConversionButton from "./VideoConversionButton";
@@ -25,6 +27,7 @@ const DeviceLayout = () => {
     showFail, setShowFail,
     ffmpeg
   } = useContext(VideoEditorContext)
+  const [mode, toggleDarkMode] = useContext(ThemeContext);
 
   const uploadFile = useRef("");
 
@@ -33,7 +36,18 @@ const DeviceLayout = () => {
     <article className={`${device}_layout`}>
       <header>
         <div className="header_container">
-        <img src={VE_White} />
+        <button
+          className="toggleDarkMode_button"
+          onClick={() =>
+            toggleDarkMode(mode)
+          }
+        >
+          <img
+            className="toggleDarkMode_button_img"
+            src={mode === "dark" ? VE_Black : VE_White}
+            alt="toggleDarkMode_button_Image"
+          />
+        </button>
         </div>
       </header>
       <div className="video_edit_title"

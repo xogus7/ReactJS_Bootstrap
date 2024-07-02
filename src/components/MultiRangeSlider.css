@@ -76,9 +76,9 @@
 
 /* For Chrome browsers */
 .thumb::-webkit-slider-thumb {
-    background-color: black;
+    background-color: var(--background-color);
     color: black;
-    border: 6px solid white;
+    border: 6px solid var(--font-color);
     border-radius: 5%;
     cursor: pointer;
     height: 3.2rem;
@@ -88,8 +88,8 @@
     position: relative;
 }
 .currVal::-webkit-slider-thumb{
-    background-color: white;
-    border: none;
+    background-color: var(--font-color);
+    border: 1px solid var(--font-color);
     width: 5px;
     height: 3.6rem;
 }
