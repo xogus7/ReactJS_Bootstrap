@@ -38,31 +38,6 @@
   }
 }
 
-.gif__out__btn {
-  width: 100%;
-  height: 40px;
-  padding: 16px 8px;
-  margin-bottom: 16px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  gap: 4px;
-  align-items: center;
-  background-color: #fff;
-}
-.gif__out__btn p {
-  margin: 0;
-  justify-content: center;
-  align-items: center;
-}
-
-.gif__out__btn:hover,
-.gif__out__btn:focus,
-.gif__out__btn:active {
-  background: #fff !important;
-  border: none !important;
-}
-
 .video-react-big-play-button-center {
   top: 50% !important;
   left: 50% !important;

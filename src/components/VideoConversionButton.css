@@ -1,0 +1,32 @@
+.gif__out__btn {
+    width: 100%;
+    height: 40px;
+    padding: 16px 8px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    align-items: center;
+    background-color: #fff;
+  }
+  .gif__out__btn p {
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    color: #383838;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  
+  .gif__out__btn:hover, &:focus, &:active {
+    background: #fff !important;
+    border: 1px solid #aeaeae !important;
+  }
+
+  .gif__out__btn:disabled {
+    background-color: #fff;
+  }
+  .gif__out__btn:disabled p {
+    color: #aeaeae;
+  }

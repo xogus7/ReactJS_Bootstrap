@@ -3,7 +3,9 @@ import { fetchFile } from '@ffmpeg/ffmpeg';
 import { readFileAsBase64, sliderValueToVideoTime } from '../utils/utils';
 import out from '../assets/icons/out.svg';
 import dark_download from '../assets/icons/dark_download.svg';
-import audio_icon from '../assets/icons/audio.png';
+import audio_icon from '../assets/icons/audio.svg';
+import { useEffect, useState } from 'react';
+import './VideoConversionButton.css'
 function VideoConversionButton({
     videoPlayerState,
     sliderValues,
@@ -14,6 +16,29 @@ function VideoConversionButton({
     onConversionFail = () => { },
     onGifCreated = () => { },
 }) {
+
+    const [min, max] = sliderValues;
+    const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
+    const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
+    const [hasAudio, setHasAudio] = useState(true);
+
+    const isHasAudio = async () => {
+        if(videoPlayerState.duration)
+        try { // check
+            ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(videoFile));
+            await ffmpeg.run('-i', 'test.mp4', '-ss', `${minTime}`, '-to', `${maxTime}`, '-q:a', '0', '-f', 'mp3', 'test.mp3');
+            ffmpeg.FS('readFile', 'test.mp3');
+        } catch (error) {
+            console.log(error);
+            setHasAudio(false);
+            console.log(hasAudio);
+        }
+    }
+    useEffect(() => {
+        isHasAudio()
+    }, [])
+
+
     const convertToGif = async () => {
         // starting the conversion process
         onConversionStart(true);
@@ -24,10 +49,6 @@ function VideoConversionButton({
         try {
             // writing the video file to memory
             ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
-
-            const [min, max] = sliderValues;
-            const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
-            const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
 
             // cutting the video and converting it to GIF with a FFMpeg command
             await ffmpeg.run('-i', inputFileName, '-ss', `${minTime}`, '-to', `${maxTime}`, '-f', 'gif', outputFileName);
@@ -60,10 +81,6 @@ function VideoConversionButton({
         const inputFileName = 'input.mp4';
         const outputFileName = 'output.mp4';
         
-        const [min, max] = sliderValues;
-        const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
-        const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
-        
         try {
             ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
             await ffmpeg.run('-ss', `${minTime}`, '-i', 'input.mp4', '-t', `${maxTime}`, '-c', 'copy', `${outputFileName}`);
@@ -91,10 +108,6 @@ function VideoConversionButton({
         const inputFileName = 'input.mp4';
         const outputFileName = 'output.mp3';
 
-        const [min, max] = sliderValues;
-        const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
-        const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
-
         try {
             ffmpeg.FS('writeFile', inputFileName, await fetchFile(videoFile));
             await ffmpeg.run('-i', inputFileName, '-ss', `${minTime}`, '-to', `${maxTime}`, '-q:a', '0', '-f', 'mp3', outputFileName);
@@ -119,16 +132,17 @@ function VideoConversionButton({
         <>
             <Button onClick={() => convertToGif()} className="gif__out__btn">
                 <img src={out} alt="GIF 변환" />
-                <p style={{ color: '#383838', fontSize: 16, fontWeight: 700 }}>GIF 변환</p>
+                <p>GIF 변환</p>
             </Button>
 
-            <Button onClick={() => onCutTheVideo()} className="gif__out__btn">
+            <Button onClick={() => onCutTheVideo()} className="gif__out__btn" disabled={(max - min) === 100}
+            >
                 <img src={dark_download} alt="비디오 저장" />
-                <p style={{ color: '#383838', fontSize: 16, fontWeight: 700 }}>비디오 저장</p>
+                <p>비디오 저장</p>
             </Button>
-            <Button onClick={() => converToAudio()} className="gif__out__btn">
+            <Button onClick={() => converToAudio()} className="gif__out__btn" disabled={hasAudio}>
                 <img src={audio_icon} alt="오디오 추출" style={{ width: '20px', height: '20px' }} />
-                <p style={{ color: '#383838', fontSize: 16, fontWeight: 700 }}>오디오 추출</p>
+                <p>오디오 추출</p>
             </Button>
         </>
     );
