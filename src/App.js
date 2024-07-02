@@ -9,24 +9,20 @@ function App() {
 
   useEffect(() => {
     const useMode = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-    const prevMode = localStorage.getItem("mode");
-    prevMode === null ? toggleDarkMode(useMode) : toggleDarkMode(prevMode);
+    const prevMode = sessionStorage.getItem("mode");
+    prevMode === undefined || null ? handleDarkMode(useMode) : handleDarkMode(prevMode);
   }, []);
 
-  const toggleDarkMode = (mode) => {
+  const handleDarkMode = (mode) => {
     const $root = document.querySelector("#root");
-    if (mode === "dark") {
-      $root.classList.add("dark");
-    } else {
-      $root.classList.remove("dark");
-    }
+    if (mode === "dark") $root.classList.add("dark");
+    else $root.classList.remove("dark");
     sessionStorage.setItem("mode", mode);
-    setMode(mode === "dark"? "light" : "dark");
-    console.log(mode)
+    setMode(mode);
   };
 
   return (
-    <ThemeContext.Provider value={[mode, toggleDarkMode]}>
+    <ThemeContext.Provider value={[mode, handleDarkMode]}>
       <VideoEditor /> 
     </ThemeContext.Provider>
   );

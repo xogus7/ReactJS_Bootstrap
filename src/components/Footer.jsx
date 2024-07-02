@@ -7,14 +7,11 @@ import "./Footer.css";
 const Footer = () => {
 
   const [mode] = useContext(ThemeContext);
-  
-
-
   return (
     <footer className='footer'>
       <div className='footer_container'>
         <div className="info">
-        <img src={mode === "dark" ? VE_White : VE_Black } />
+        <img src={mode === "dark" ? VE_Black : VE_White } />
         </div>
         <div className="contact">
           <ul className="contact_info">

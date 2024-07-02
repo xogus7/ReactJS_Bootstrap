@@ -6,6 +6,7 @@ import { sliderValueToVideoTime } from "../../utils/utils";
 import useDeviceType from '../../hooks/useDeviceType';
 import DeviceLayout from "../../components/DeviceLayout";
 import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 
 export const VideoEditorContext = React.createContext();
 const ffmpeg = createFFmpeg({ log: true });
@@ -93,6 +94,7 @@ const VideoEditor = () => {
         ffmpeg
       }}
     >
+      <Header />
       <DeviceLayout />
       <ToastContainer className="p-3" position={'top-center'} style={{ zIndex: 1 }}>
         <Toast onClose={() => setShowSuccess(false)} show={showSuccess} delay={2000} bg="dark" autohide>

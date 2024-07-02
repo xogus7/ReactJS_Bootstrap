@@ -1,12 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
-import { fetchFile } from "@ffmpeg/ffmpeg";
+import video_placeholder_black from "../assets/images/editor/video_placeholder_black.png";
+import video_placeholder_white from "../assets/images/editor/video_placeholder_white.png";
 import { toTimeString } from "../utils/utils";
-
-import video_placeholder from "../assets/images/editor/video_placeholder.png";
-import VE_White from "../assets/images/editor/VE_White.png"
-import VE_Black from "../assets/images/editor/VE_Black.png"
-
 import { VideoEditorContext } from "../pages/VideoEditor/VideoEditor";
 import { ThemeContext } from "../App";
 import VideoPlayer from "./VideoPlayer";
@@ -27,29 +23,13 @@ const DeviceLayout = () => {
     showFail, setShowFail,
     ffmpeg
   } = useContext(VideoEditorContext)
-  const [mode, toggleDarkMode] = useContext(ThemeContext);
+  const [mode] = useContext(ThemeContext);
 
   const uploadFile = useRef("");
 
   return (
     
     <article className={`${device}_layout`}>
-      <header>
-        <div className="header_container">
-        <button
-          className="toggleDarkMode_button"
-          onClick={() =>
-            toggleDarkMode(mode)
-          }
-        >
-          <img
-            className="toggleDarkMode_button_img"
-            src={mode === "dark" ? VE_Black : VE_White}
-            alt="toggleDarkMode_button_Image"
-          />
-        </button>
-        </div>
-      </header>
       <div className="video_edit_title"
       >
         <h1 className="title">Video Edit</h1>
@@ -87,7 +67,7 @@ const DeviceLayout = () => {
           ) : (
             <>
               <img className={`video_placeholder_img_${device}`}
-                src={video_placeholder}
+                src={mode === "dark" ? video_placeholder_black : video_placeholder_white}
                 alt="비디오를 업로드해주세요."
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
