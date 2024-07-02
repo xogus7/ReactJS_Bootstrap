@@ -26,7 +26,7 @@ export const toTimeString = (sec, showMilliSeconds = true) => {
         + minutes +
         ':' +
         String(seconds).replace(maltissaRegex, '') +
-        (showMilliSeconds ? (millisec ? millisec[0] : '') : '')
+        (showMilliSeconds ? (millisec ? millisec[0].toString().substring(0,3) : '') : '')
     );
 };
 

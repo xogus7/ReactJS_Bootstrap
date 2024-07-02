@@ -13,7 +13,7 @@ const ffmpeg = createFFmpeg({ log: true });
 
 const VideoEditor = () => {
   const device = useDeviceType();
-  const $videoPlayerDiv = document.querySelector(".video-player")
+  const $videoPlayerDiv = document.querySelector(".video_player")
   const [ffmpegLoaded, setFFmpegLoaded] = useState(false);
   const [sliderValues, setSliderValues] = useState([0, 100]);
   const [videoFile, setVideoFile] = useState();
@@ -23,12 +23,21 @@ const VideoEditor = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showFail, setShowFail] = useState(false);
   const [currentVideoValue, setCurrentVideoValue] = useState(0);
+  const [hasAudio, setHasAudio] = useState(false);
+  const [done, setDone] = useState(false);
+  const regex = /^\s+Stream.+Audio/
 
   useEffect(() => {
     ffmpeg.load().then(() => {
       setFFmpegLoaded(true);
     });
   }, []);
+
+  if (!done)
+  ffmpeg.setLogger(({ message }) => {
+    if(message.match(regex)) setHasAudio(true);
+    if(message === "FFMPEG_END") setDone(true);
+ });
 
   useEffect(() => {
     if (!videoFile) {
@@ -91,6 +100,7 @@ const VideoEditor = () => {
         processing, setProcessing,
         showSuccess, setShowSuccess,
         showFail, setShowFail,
+        hasAudio, setHasAudio,
         ffmpeg
       }}
     >

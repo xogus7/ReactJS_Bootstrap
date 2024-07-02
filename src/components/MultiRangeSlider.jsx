@@ -6,7 +6,7 @@ import { fetchFile } from '@ffmpeg/ffmpeg';
 import { toTimeString } from '../utils/utils';
 
 export default function MultiRangeSlider({ min, curr, max, onChange, disabled, duration }) {
-    const { ffmpeg, videoFile, videoPlayer, videoPlayerState } = useContext(VideoEditorContext);
+    const { ffmpeg, videoFile, videoPlayer, videoPlayerState, checkAudio } = useContext(VideoEditorContext);
     const [minVal, setMinVal] = useState(min);
     const [maxVal, setMaxVal] = useState(max);
     const [currVal, setCurrVal] = useState(curr);
@@ -83,7 +83,7 @@ export default function MultiRangeSlider({ min, curr, max, onChange, disabled, d
 
     const videoToSliderImages = async () => {
         let imgURL = []
-        if (videoPlayer && videoPlayerState && videoPlayerState.duration) {
+        if (!ffmpeg.isLoadied && videoPlayerState.duration) {
             try {
                 ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(videoFile));
                 await ffmpeg.run("-skip_frame", "nokey", "-i", "input.mp4", "-vf", `fps=1/${videoPlayerState.duration / 11}`, `frame%d.png`);
@@ -167,7 +167,10 @@ export default function MultiRangeSlider({ min, curr, max, onChange, disabled, d
                         <div className="sliderImage_container">
                             <img src={url} alt={`Image ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
-                    ))}
+                        
+                    ))
+                    
+                    }
                 </div>
                 <div ref={range} className="slider__range" style={{ color: 'white' }}>
                     {!imageUrls.length && <> Loaing TimeLine Thumbnail..</>}
