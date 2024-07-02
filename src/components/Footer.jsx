@@ -1,14 +1,15 @@
 import { useContext } from "react";
 import VE_White from "../assets/images/editor/VE_White.png"
 import VE_Black from "../assets/images/editor/VE_Black.png"
+import { VideoEditorContext } from "../pages/VideoEditor/VideoEditor";
 import { ThemeContext } from "../App";
 import "./Footer.css";
 
 const Footer = () => {
-
+  const {device} = useContext(VideoEditorContext);
   const [mode] = useContext(ThemeContext);
   return (
-    <footer className='footer'>
+    <footer className={`footer ${device}`}>
       <div className='footer_container'>
         <div className="info">
         <img src={mode === "dark" ? VE_Black : VE_White } />

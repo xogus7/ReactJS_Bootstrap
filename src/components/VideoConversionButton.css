@@ -9,24 +9,22 @@
     gap: 4px;
     align-items: center;
     background-color: #fff;
-  }
-  .gif__out__btn p {
-    margin: 0;
-    justify-content: center;
-    align-items: center;
-    color: #383838;
-    font-size: 16px;
-    font-weight: 700;
-  }
-  
-  .gif__out__btn:hover, &:focus, &:active {
-    background: #fff !important;
-    border: 1px solid #aeaeae !important;
-  }
-
-  .gif__out__btn:disabled {
-    background-color: #fff;
-  }
-  .gif__out__btn:disabled p {
-    color: #aeaeae;
+    &:hover, &:focus, &:active {
+      background-color: #fff !important;
+      border: 1px solid #aeaeae !important;
+    }
+    &:disabled {
+        background-color: #fff;
+    }
+    p {
+      margin: 0;
+      justify-content: center;
+      align-items: center;
+      color: #383838;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    &:disabled p {
+      color: #aeaeae;
+    }
   }

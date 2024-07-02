@@ -50,7 +50,7 @@ const DeviceLayout = () => {
           </div>
         )}
       </div>
-      <section className="video">
+      <section className={`video ${device}`} style={{width: '100%', height: '100%'}}>
         {
           videoFile ? (
             <>
@@ -66,7 +66,7 @@ const DeviceLayout = () => {
             </>
           ) : (
             <>
-              <img className={`video_placeholder_img_${device}`}
+              <img className={`video_placeholder_img ${device}`}
                 src={mode === "dark" ? video_placeholder_black : video_placeholder_white}
                 alt="비디오를 업로드해주세요."
                 onDragOver={(e) => e.preventDefault()}
@@ -77,15 +77,14 @@ const DeviceLayout = () => {
                 }}
                 onClick={() => uploadFile.current.click()}
               />
-              <div>
+              <div className="upload__btn_container">
                 <input onChange={(e) => setVideoFile(e.target.files[0])}
                   type="file"
                   accept="video/*"
                   style={{ display: "none" }}
                   ref={uploadFile}
                 />
-                <Button
-                  className="upload__btn"
+                <Button className="upload__btn"
                   onClick={() => uploadFile.current.click()}
                 >
                   비디오 업로드
@@ -110,7 +109,7 @@ const DeviceLayout = () => {
                 duration={videoPlayerState.duration}
               />
             </section>
-            <section className={`video_conversion_${device}`}>
+            <section className={`video_conversion ${device}`}>
               <VideoConversionButton
                 onConversionStart={() => setProcessing(true)}
                 onConversionEnd={() => {

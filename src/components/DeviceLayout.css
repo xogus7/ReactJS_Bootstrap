@@ -1,14 +1,39 @@
 .mobile_layout {
-    width: 393px;
+    width: 400px;
+    height: 100%;
+    max-height: 800px;
     margin: 0 auto;
     padding: 16px 16px;
+    background-color: var(--background-color);
 }
 
-.tablet_layout, .pc_layout {
+.tablet_layout,
+.pc_layout {
+    width: 100vw;
+    height: 600px;
     max-width: 740px;
     margin: 0 auto;
+    margin-bottom: 14px;
     padding: 16px 16px;
+    background-color: var(--background-color);
 }
+
+section.video {
+    &.mobile {
+        width: 100%;
+        height: 100%;
+        max-width: 400px;
+        max-height: 400px;
+    }
+
+    &.tablet,
+    &.pc {
+        width: 100%;
+        height: 100%;
+        max-height: 400px;
+    }
+}
+
 
 .video_edit_title {
     display: flex;
@@ -33,7 +58,7 @@
     background-color: #0d6efd !important;
     border: 1px solid #0d6efd !important;
     padding: 16px 8px;
-    margin-bottom: 86px;
+    margin-bottom: 75px;
     color: #fff;
     text-align: center;
     font-family: SUIT;
@@ -41,11 +66,11 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-}
 
-.upload__btn:hover, &:focus, &:active {
-    background-color: #383838 !important;
-    border-color: #383838 !important;
+    &:hover, &:focus, &:active {
+        background-color: #383838 !important;
+        border-color: #383838 !important;
+    }
 }
 
 .re__upload__btn {
@@ -62,26 +87,24 @@
     font-weight: 700;
     border: none;
     line-height: normal;
+
+    &:hover, &:focus, &:active {
+        background-color: #383838 !important;
+        border-color: #383838 !important;
+    }
 }
 
-.re__upload__btn:hover, &:focus, &:active {
-    background-color: #383838 !important;
-    border-color: #383838 !important;
-}
-
-.video_placeholder_img_mobile {
-    margin-bottom: 32px;
-}
-
-.video_placeholder_img_tablet, .video_placeholder_img_pc {
-    width: 100%;
-    max-height: inherit;
-    margin-bottom: 32px;
+.video_placeholder_img {
+    &.mobile, &.tablet, &.pc {
+        width: 100%;
+        max-height: inherit;
+        margin-bottom: 32px;
+    }
 }
 
 .video_slider {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 30px;
     margin-bottom: 62px;
     display: flex;
     justify-content: center;
@@ -94,7 +117,10 @@
     text-align: center;
 }
 
-.video_conversion_tablet, .video_conversion_pc {
-    display: flex;
-    gap: 16;
+.video_conversion {
+
+    &.tablet, &.pc {
+        display: flex;
+        gap: 16;
+    }
 }

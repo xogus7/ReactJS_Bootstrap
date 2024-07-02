@@ -5,6 +5,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    bottom: 0;
+    &.tablet, &.pc {
+        /* 임시 */
+        position: fixed;
+    }
 }
 
 .footer_container {

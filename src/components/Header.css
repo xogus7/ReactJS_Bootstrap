@@ -10,19 +10,15 @@ header {
 }
 
 .header_container {
-    display: flex;
-    width: 98%;
-    min-width: 390px;
-    max-width: 740px;
+    width: 740px;
     display: flex;
     justify-content: space-between;
-}
-.header_container.mobile {
-    width: 390px;
+    &.mobile {
+        width: 390px;
+    }
 }
 
 .toggleDarkMode_button {
-
     background-color: var(--backgroun-color);
     border: none;
 }

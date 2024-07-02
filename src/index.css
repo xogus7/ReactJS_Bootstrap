@@ -124,9 +124,10 @@ table {
 }
 html,
 body,
+canvas,
 #root {
     height: 100%;
-    background-color:var(--background-color);
+    background-color: var(--background-color);
     color: var(--font-color);
 }
 
