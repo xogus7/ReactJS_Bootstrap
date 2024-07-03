@@ -101,6 +101,7 @@ const VideoEditor = () => {
         showSuccess, setShowSuccess,
         showFail, setShowFail,
         hasAudio, setHasAudio,
+        setDone,
         ffmpeg
       }}
     >

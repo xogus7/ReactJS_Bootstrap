@@ -6,7 +6,12 @@ import { fetchFile } from '@ffmpeg/ffmpeg';
 import { toTimeString } from '../utils/utils';
 
 export default function MultiRangeSlider({ min, curr, max, onChange, disabled, duration }) {
-    const { ffmpeg, videoFile, videoPlayer, videoPlayerState, checkAudio } = useContext(VideoEditorContext);
+    const { ffmpeg,
+        videoFile, videoPlayer,
+        videoPlayerState, checkAudio,
+        setDone, setHasAudio,
+
+    } = useContext(VideoEditorContext);
     const [minVal, setMinVal] = useState(min);
     const [maxVal, setMaxVal] = useState(max);
     const [currVal, setCurrVal] = useState(curr);
@@ -103,6 +108,10 @@ export default function MultiRangeSlider({ min, curr, max, onChange, disabled, d
     useEffect(() => {
         setImageUrls([]);
         videoToSliderImages();
+        setMinVal(0);
+        setMaxVal(100);
+        setDone(false);
+        setHasAudio(false);
     }, [videoPlayerState.duration])
 
     return (

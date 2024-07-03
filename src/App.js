@@ -8,9 +8,9 @@ function App() {
   const [mode, setMode] = useState();
 
   useEffect(() => {
-    const useMode = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    const userMode = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
     const prevMode = sessionStorage.getItem("mode");
-    prevMode === undefined || null ? handleDarkMode(useMode) : handleDarkMode(prevMode);
+    (prevMode === undefined || prevMode === null) ? handleDarkMode(userMode) : handleDarkMode(prevMode);
   }, []);
 
   const handleDarkMode = (mode) => {

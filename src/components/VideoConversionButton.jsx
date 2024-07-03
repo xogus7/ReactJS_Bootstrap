@@ -36,7 +36,7 @@ function VideoConversionButton({
 
             // cutting the video and converting it to GIF with a FFMpeg command
             await ffmpeg.run('-i', inputFileName, '-ss', `${minTime}`, '-to', `${maxTime}`, '-f', 'gif', outputFileName);
-
+            
             // reading the resulting file
             const data = ffmpeg.FS('readFile', outputFileName);
 
